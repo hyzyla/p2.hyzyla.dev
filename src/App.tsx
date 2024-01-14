@@ -2,7 +2,7 @@ import "./App.css";
 
 import Module from "@jspawn/qpdf-wasm/qpdf.js";
 import WASM_URL from "@jspawn/qpdf-wasm/qpdf.wasm?url";
-import React, { useMemo, useRef } from "react";
+import React, { useRef } from "react";
 
 import Editor from "@monaco-editor/react";
 import { Button } from "@/components/ui/button";
@@ -38,12 +38,6 @@ function App() {
   const editorRef = useRef<unknown>(null);
   const [pdfJson, setPdfJson] = React.useState<string>("");
   const [pdf, setPdf] = React.useState<Uint8Array | null>(null);
-
-  // memoize pdf document file
-  const pdfDocument = useMemo(() => {
-    if (!pdf) return null;
-    return { data: pdf };
-  }, [pdf]);
 
   const handleFileChage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const mod = await loadQPDF();
@@ -96,10 +90,6 @@ function App() {
 
   const handleEditorDidMount = (editor: unknown) => {
     editorRef.current = editor;
-  };
-
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
   };
 
   return (
